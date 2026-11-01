@@ -1,6 +1,6 @@
 [project]
 name = "tse-api"
-version = "0.0.0"
+version = "0.1.0"
 description = "API e painel web para consultar dados públicos do TSE: resultados das eleições e boletins de urna por seção"
 readme = "README.md"
 license = "MIT"
