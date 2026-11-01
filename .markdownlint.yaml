@@ -1,0 +1,8 @@
+# https://github.com/DavidAnson/markdownlint
+default: true
+MD013: false        # tamanho de linha (tabelas e links longos)
+MD024:
+  siblings_only: true
+MD033: false        # HTML inline (comentários, badges)
+MD041: false        # primeira linha não precisa ser H1 (CLAUDE.md, templates)
+MD060: false        # alinhamento de pipes em tabelas (cosmético; quebra com acentos)

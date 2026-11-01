@@ -1,0 +1,64 @@
+# https://pre-commit.com — hooks genéricos (qualquer linguagem).
+# Branches lang/* adicionam formatter/linter da stack.
+# Atualizar versões: `pre-commit autoupdate`
+default_install_hook_types: [pre-commit, commit-msg]
+default_stages: [pre-commit]
+# Fixtures são arquivos originais do TSE e não podem ser normalizados.
+exclude: ^tests/fixtures/
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
+        args: [--fix=lf]
+      - id: check-yaml
+        args: [--allow-multiple-documents]
+      - id: check-json
+      - id: check-toml
+      - id: check-merge-conflict
+      - id: check-case-conflict
+      - id: check-added-large-files
+        args: [--maxkb=500]
+      - id: check-executables-have-shebangs
+      - id: detect-private-key
+      - id: no-commit-to-branch
+        args: [--branch, main]
+
+  # Python (mesma versão de regras do pyproject.toml)
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.17.3
+    hooks:
+      - id: ruff-check
+      - id: ruff-format
+
+  # Segredos
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.30.1
+    hooks:
+      - id: gitleaks
+
+  # Mensagens de commit (Conventional Commits)
+  - repo: https://github.com/compilerla/conventional-pre-commit
+    rev: v4.4.0
+    hooks:
+      - id: conventional-pre-commit
+        stages: [commit-msg]
+        args: [--strict, feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert]
+
+  # Markdown
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.49.1
+    hooks:
+      - id: markdownlint
+        # CHANGELOG.md é gerado pelo release-please (formato próprio, não editar à mão)
+        exclude: ^CHANGELOG\.md$
+
+  # Shell scripts
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.11.0.1
+    hooks:
+      - id: shellcheck

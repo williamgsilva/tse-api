@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Resultados das eleições e boletins de urna por seção, a partir dos dados públicos do TSE."
+    />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23155e75'/><path d='M9 17l5 5 9-12' stroke='white' stroke-width='3.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>"
+    />
+    <script>
+      try {
+        var theme = localStorage.getItem("tse-theme");
+        if (theme === "light" || theme === "dark") document.documentElement.setAttribute("data-theme", theme);
+      } catch (e) {}
+    </script>
+    <title>Eleições 2026 · Mapa e boletins</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

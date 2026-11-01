@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "disableBypassPermissionsMode": "disable",
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.local)",
+      "Read(./.env.*.local)",
+      "Read(./.env.development)",
+      "Read(./.env.staging)",
+      "Read(./.env.production)",
+      "Read(./secrets/**)",
+      "Read(./*.pem)",
+      "Read(./*.key)",
+      "Read(./src/**/*.pem)",
+      "Read(./src/**/*.key)",
+      "Read(./frontend/src/**/*.pem)",
+      "Read(./frontend/src/**/*.key)",
+      "Read(./tests/**/*.pem)",
+      "Read(./tests/**/*.key)",
+      "Read(./config/**)",
+      "Read(./deploy/**/*.pem)",
+      "Read(./deploy/**/*.key)",
+      "Read(./infra/**/*.pem)",
+      "Read(./infra/**/*.key)",
+      "Read(./certs/**)",
+      "Edit(./.env)",
+      "Edit(./.env.local)",
+      "Edit(./.env.*.local)",
+      "Edit(./.env.development)",
+      "Edit(./.env.staging)",
+      "Edit(./.env.production)",
+      "Edit(./secrets/**)",
+      "Bash(git push --force*)",
+      "Bash(git push -f*)",
+      "Bash(git push * --force*)",
+      "Bash(git push * -f*)",
+      "Bash(sudo *)"
+    ],
+    "ask": [
+      "Bash(curl *)",
+      "Bash(wget *)",
+      "Bash(git push*)",
+      "Bash(git reset --hard*)",
+      "Bash(git clean *)",
+      "Bash(git rebase *)",
+      "Bash(rm -rf *)",
+      "Bash(rm -r *)",
+      "Bash(docker *)",
+      "Bash(kubectl *)",
+      "Bash(terraform *)",
+      "Edit(./.github/**)",
+      "Edit(./.claude/**)",
+      "Bash(make clean*)"
+    ],
+    "allow": [
+      "Bash(make *)",
+      "Bash(git status*)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git show*)",
+      "Bash(git branch*)",
+      "Bash(git switch*)",
+      "Bash(git checkout -b*)",
+      "Bash(git add*)",
+      "Bash(git commit*)",
+      "Bash(git stash*)",
+      "Bash(git fetch*)",
+      "Bash(git restore --staged*)",
+      "Bash(ls*)",
+      "Bash(cat *)",
+      "Bash(head *)",
+      "Bash(tail *)",
+      "Bash(wc *)",
+      "Bash(find *)",
+      "Bash(grep *)",
+      "Bash(rg *)",
+      "Bash(tree*)",
+      "Bash(pwd)",
+      "Bash(which *)",
+      "Bash(command -v *)",
+      "Bash(mkdir *)",
+      "Bash(touch *)",
+      "Bash(cp *)",
+      "Bash(mv *)",
+      "Bash(chmod +x *)",
+      "Bash(diff *)",
+      "Bash(sort *)",
+      "Bash(jq *)",
+      "Bash(echo *)",
+      "Bash(node *)",
+      "Bash(npm test*)",
+      "Bash(npm run *)",
+      "Bash(npm ls*)",
+      "Bash(npx *)",
+      "Bash(python3 *)",
+      "Bash(pytest*)",
+      "Bash(go test*)",
+      "Bash(go build*)",
+      "Bash(go vet*)",
+      "Bash(pre-commit run*)"
+    ]
+  },
+  "sandbox": {
+    "enabled": true,
+    "autoAllowBashIfSandboxed": true
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/protect-secrets.sh",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/format.sh",
+            "timeout": 120
+          }
+        ]
+      }
+    ]
+  },
+  "env": {
+    "BASH_MAX_OUTPUT_LENGTH": "12000",
+    "MAX_MCP_OUTPUT_TOKENS": "10000"
+  }
+}

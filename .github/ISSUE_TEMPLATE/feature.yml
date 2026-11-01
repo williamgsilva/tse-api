@@ -1,0 +1,33 @@
+name: Funcionalidade
+description: Proposta de nova funcionalidade ou melhoria
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problema / necessidade
+      description: Qual dor do usuário isso resolve? (não descreva a solução ainda)
+    validations:
+      required: true
+  - type: textarea
+    id: story
+    attributes:
+      label: História de usuário
+      placeholder: Como <papel>, quero <ação>, para <benefício>.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Critérios de aceite
+      description: Um comportamento observável e testável por linha (ver docs/prompts/09-spec.md).
+      placeholder: |
+        1. QUANDO <evento> ENTÃO o sistema DEVE <resposta>
+        2. SE <entrada inválida/falha> ENTÃO o sistema DEVE <tratamento>
+    validations:
+      required: true
+  - type: textarea
+    id: nfr
+    attributes:
+      label: Requisitos não funcionais
+      description: Performance, segurança, volume, auditoria…

@@ -1,0 +1,25 @@
+# Normaliza finais de linha
+* text=auto eol=lf
+
+# Windows scripts precisam de CRLF
+*.bat  text eol=crlf
+*.cmd  text eol=crlf
+*.ps1  text eol=crlf
+
+# Binários
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.ico  binary
+*.pdf  binary
+*.zip  binary
+*.gz   binary
+
+# Lockfiles: diff reduzido em PRs
+*.lock          linguist-generated=true -diff
+package-lock.json linguist-generated=true -diff
+
+# Fixtures reais do TSE: preservar bytes (CSV em latin-1 com CRLF, BU binário ASN.1)
+tests/fixtures/** -text
+*.dat  binary

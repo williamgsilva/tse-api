@@ -1,0 +1,8 @@
+# Donos padrão: revisão obrigatória (com branch protection "Require review from Code Owners").
+*                   @williamgsilva
+
+# Áreas sensíveis
+/.github/           @williamgsilva
+/.claude/           @williamgsilva
+/AGENTS.md          @williamgsilva
+/docs/architecture/ @williamgsilva

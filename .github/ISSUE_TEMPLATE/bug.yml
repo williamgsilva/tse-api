@@ -1,0 +1,32 @@
+name: Bug
+description: Algo não funciona como esperado
+labels: [bug]
+body:
+  - type: textarea
+    id: actual
+    attributes:
+      label: O que aconteceu
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: O que era esperado
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Passos para reproduzir
+      placeholder: "1. ...\n2. ...\n3. ..."
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Versão / ambiente
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs relevantes (sem dados sensíveis)
+      render: shell

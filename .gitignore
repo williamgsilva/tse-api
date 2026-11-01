@@ -1,0 +1,50 @@
+# --- Segredos / ambiente ---
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+secrets/
+
+# --- SO / editores ---
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+*.swp
+*~
+
+# --- Build / saída ---
+dist/
+build/
+out/
+bin/
+tmp/
+coverage/
+reports/
+*.log
+
+# --- IA (configs locais) ---
+.claude/settings.local.json
+
+# --- Python ---
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+
+# --- Node / frontend ---
+node_modules/
+frontend/coverage/
+
+# --- Dados baixados do TSE (cache de urnas, CSVs e base DuckDB) ---
+data/

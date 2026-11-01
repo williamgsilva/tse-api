@@ -1,0 +1,152 @@
+[project]
+name = "tse-api"
+version = "0.0.0"
+description = "API e painel web para consultar dados públicos do TSE: resultados das eleições e boletins de urna por seção"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi>=0.115",
+    "pydantic>=2.11",
+    "uvicorn[standard]>=0.30",
+    "httpx>=0.27",
+    "asn1tools>=0.166",
+    "duckdb>=1.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8",
+    "pytest-cov>=5",
+    "ruff>=0.6",
+    "mypy>=1.11",
+    "import-linter>=2.1",
+]
+
+[project.scripts]
+tse-ingest = "tse_api.bootstrap.cli:main"
+
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"tse_api.modules.ballots.infrastructure" = ["spec/*.asn1"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+pythonpath = ["."]
+filterwarnings = ["ignore:Using `httpx` with `starlette.testclient`"]
+
+[tool.coverage.run]
+source = ["tse_api"]
+branch = true
+
+[tool.coverage.report]
+skip_empty = true
+show_missing = false
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "S", "SIM", "RUF"]
+ignore = [
+    "S101",   # assert é o padrão do pytest
+    "S608",   # SQL dinâmico só com nomes de colunas fixos; valores sempre parametrizados
+    "B008",   # Query()/Depends() em defaults é o padrão do FastAPI
+    "RUF001", # textos em português usam caracteres acentuados de propósito
+    "RUF002",
+    "RUF003",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S", "B"]
+
+[tool.mypy]
+python_version = "3.10"
+mypy_path = "src"
+packages = ["tse_api"]
+strict_optional = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+check_untyped_defs = true
+disallow_incomplete_defs = true
+
+[[tool.mypy.overrides]]
+module = ["asn1tools", "asn1tools.*"]
+ignore_missing_imports = true
+
+# Verificação de arquitetura (docs/standards/arquitetura.md): regra de dependência e fronteiras entre módulos.
+[tool.importlinter]
+root_package = "tse_api"
+include_external_packages = true
+
+[[tool.importlinter.contracts]]
+name = "Camadas hexagonais em cada módulo"
+type = "layers"
+containers = [
+    "tse_api.modules.elections",
+    "tse_api.modules.ballots",
+    "tse_api.modules.open_data",
+    "tse_api.modules.geography",
+]
+layers = ["interfaces | infrastructure", "application", "domain"]
+
+[[tool.importlinter.contracts]]
+name = "Domínio sem framework, I/O ou bibliotecas externas"
+type = "forbidden"
+source_modules = [
+    "tse_api.modules.elections.domain",
+    "tse_api.modules.ballots.domain",
+    "tse_api.modules.open_data.domain",
+    "tse_api.modules.geography.domain",
+]
+forbidden_modules = ["fastapi", "starlette", "pydantic", "httpx", "duckdb", "asn1tools"]
+
+[[tool.importlinter.contracts]]
+name = "Aplicação não depende de framework nem de adaptadores"
+type = "forbidden"
+source_modules = [
+    "tse_api.modules.elections.application",
+    "tse_api.modules.ballots.application",
+    "tse_api.modules.open_data.application",
+    "tse_api.modules.geography.application",
+]
+forbidden_modules = ["fastapi", "starlette", "httpx", "duckdb", "asn1tools"]
+
+[[tool.importlinter.contracts]]
+name = "Módulos só se conhecem pela API pública"
+type = "forbidden"
+source_modules = ["tse_api.modules.ballots", "tse_api.modules.open_data"]
+forbidden_modules = [
+    "tse_api.modules.elections.domain",
+    "tse_api.modules.elections.application",
+    "tse_api.modules.elections.infrastructure",
+    "tse_api.modules.elections.interfaces",
+]
+allow_indirect_imports = true
+
+[[tool.importlinter.contracts]]
+name = "Dados abertos só usa boletins pela API pública"
+type = "forbidden"
+source_modules = ["tse_api.modules.open_data"]
+forbidden_modules = [
+    "tse_api.modules.ballots.domain",
+    "tse_api.modules.ballots.application",
+    "tse_api.modules.ballots.infrastructure",
+    "tse_api.modules.ballots.interfaces",
+]
+allow_indirect_imports = true
+
+[[tool.importlinter.contracts]]
+name = "Módulos sem dependência de bootstrap"
+type = "forbidden"
+source_modules = ["tse_api.modules", "tse_api.shared"]
+forbidden_modules = ["tse_api.bootstrap"]
