@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 # Imagem única: API (FastAPI) + build do frontend servido pela própria API.
 
-FROM node:20-alpine AS frontend
+FROM node:25-alpine AS frontend
 WORKDIR /app/frontend
 COPY frontend/package.json frontend/package-lock.json ./
 RUN npm ci --no-audit --no-fund
